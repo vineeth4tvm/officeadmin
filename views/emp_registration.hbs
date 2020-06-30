@@ -1,0 +1,69 @@
+<html><head>
+    <title>{{{ title }}}</title>
+    <style type="text/css">
+        input{
+            margin-top: 5px;
+        }
+    </style>
+    </head>
+    <body>
+        <form action="register" method="POST">
+            <h2>{{{title}}}</h2><p>{{{msg}}}</p><p>{{{msg2}}}</p>
+            <table>
+            <input name="fullname" type="text" placeholder="Full Name as given on ID Proof" /><br/>
+            <input name="dob" type="number" placeholder="D.O.B in DDMMYYYY" maxlength="8" /><br/>
+            <label for="id_proof">Choose ID Proof </label><select name="id_proof">
+                <option value="">select
+                </option>
+                <option value="pan">PAN
+                </option>
+                <option value="drivinglicense">Driving License
+                </option>
+                <option value="voterid">Voter's ID
+                </option>
+                <option value="sslc">10th Certificate
+                </option>
+                <option value="birthcertificate">Birth Certificate
+                </option>
+            </select>
+            <input name="idproofnumber" type="text" placeholder="ID Proof Number" /><br/>
+            <label for="address_proof">Choose Address Proof</label><select name="address_proof">
+                <option value="">select
+                </option>
+                <option value="aadhar">Aadhar
+                </option>
+                <option value="votersid">Voter's ID
+                </option>
+                <option value="drivinglicense">Driving License
+                </option>
+                <option value="electricitybill">Electricity Bill
+                </option>
+                <option value="others">Others
+                </option>
+            </select>
+
+            <input name="addressproofnumber" type="text" placeholder="Adress Proof Number" /><br/>
+            <input name="address1" type="text" placeholder="Adress line 1" />
+            <input name="address2" type="text" placeholder="Adress line 2" />
+            <input name="address3" type="text" placeholder="Adress line 3" /><br/>
+            <input name="pin" type="text" placeholder="Pin Code" /><br/>
+            <input name="mobile" type="tel" placeholder="Mobile Number" /><br/>
+            <input name="email" type="email" placeholder="Email ID" /><br/>
+            <input name="guardian_name" type="text" placeholder="Guardian Full Name" />
+            <input name="guardian_phone" type="text" placeholder="Guardian Phone" /><br/>
+            <textarea name="guardian_address" placeholder="Guardian Full Address"></textarea><br/>
+            <label>Upload Documents:</label><br/>
+            <label>Id Proof</label><input type="file" name="idfile" /><br/>
+            <label>Address Proof</label><input type="file" name="addressfile" /><br/>
+            <label>Passport Size Photo</label><input type="file" name="photo" /><br/>
+            <label for="employeeid">Employee ID</label><input type="number" name="employeeid" value="{{{empid}}}"></br>
+            <label for="employeedesignation">Designation</label><select name="employeedesignation">
+                <option value="">Select</option>
+                <option value="telecaller">Telecaller</option>
+            </select></br>
+            <input type="submit" value="submit" />
+        </table>
+        </form>
+        <ul><li><a href="/officeadmin/home">Admin Home</a></li><li><a href="logout">Logout</a></li></ul>
+    </body>
+</html>
