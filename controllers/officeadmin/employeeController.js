@@ -58,7 +58,8 @@ exports.saveemployee = function(req, res){
             }
 
             else{
-            res.render('employee_success', {title : 'Employee Created!', fullname : data.fullname,
+            res.render('employee_success', {title : 'Employee Created!',
+                 fullname : data.fullname,
                  dob: data.dob, 
                  id_proof: data.id_proof,
                  idproofnumber: data.idproofnumber, 
