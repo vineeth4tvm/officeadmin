@@ -15,9 +15,28 @@ exports.register = function(req, res){
             message2 = req.query.error;
         }
         var empid ='';
-        employeeregistrationmodel2 = new employeeregistrationmodel;
+        //employeeregistrationmodel2 = new employeeregistrationmodel;
         //employeeregistrationmodel2.employeeid.find({},)
-        res.render('emp_registration', {title : 'Register New Employee', msg: message, msg2: message2, empid: id});
+        var id;
+        var employee = employeeregistrationmodel.find().sort({employeeid: -1}).limit(1);
+        employee.exec(function(err, data){
+            if(err){
+                console.log(err);
+            }
+            else{
+                var stringval = JSON.stringify(data);
+                var objectval = JSON.parse(stringval);
+                var id1 = objectval[0]['employeeid'];
+                id = parseInt(id1) + 1;
+                var ydate = Date.now();
+                var year = ydate.getFullYear();
+                //var id = parseInt(id1) + 1;
+                console.log(id);
+                res.render('emp_registration', {title : 'Register New Employee', msg: message, msg2: message2, empid: id});
+            }
+        })
+        
+        
     }
 
 }
@@ -58,7 +77,8 @@ exports.saveemployee = function(req, res){
             }
 
             else{
-            res.render('employee_success', {title : 'Employee Created!',
+            res.render('employee_success', {
+                 title : 'Employee Created!',
                  fullname : data.fullname,
                  dob: data.dob, 
                  id_proof: data.id_proof,
@@ -90,4 +110,22 @@ exports.saveemployee = function(req, res){
             res.redirect('/officeadmin/register?emptyfields=true');
         } 
     }
+}
+
+exports.edit = function(req, res){
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+    if(req.query.username){
+
+    }
+    else{
+        var err = [];
+        err.status = 'Bad URL';
+        err.stack = 'Please check the link that you clicked';
+        res.render('error', {message: 'The page you are looking for could not be found', error : err} )
+    }
+ 
+    
 }

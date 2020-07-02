@@ -17,6 +17,6 @@ router.get('/register', employeeController.register);
 
 router.post('/register', employeeController.saveemployee);
 
-
+router.get('/editemployee', employeeController.edit);
 
 module.exports = router;

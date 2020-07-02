@@ -5,36 +5,21 @@
             margin-top: 5px;
         }
     </style>
-    {{{script}}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+     $(document).ready(function(){            
+            $('#id_proof > option[value="{{{id_prood}}}]').attr("selected", "selected");
+            $('#address_proof > option[value="{{{address_proof}}}]').attr("selected", "selected");
+    });
+    </script>
     </head>
     <body>
         <form action="register" method="POST">
-
-                dob: data.dob, 
-                 id_proof: data.id_proof,
-                 idproofnumber: data.idproofnumber, 
-                 address_proof: data.address_proof,
-                 addressproofnumber : data.addressproofnumber,
-                 address1 : data.address1,
-                 address2 : data.address2,
-                 address3 : data.address3,
-                 pin : data.pin,
-                 mobile: data.mobile,
-                 email : data.email,
-                 guardian_name : data.guardian_name,
-                 guardian_phone : data.guardian_phone,
-                 guardian_address : data.guardian_address,
-                 employeeid : data.employeeid,
-                 created_by : data.created_by,
-                 created_on : data.created_on,
-                 updated_by : data.updated_by, 
-                 updated_on : data.updated_on, 
-                 employeedesignation : data.employeedesignation
             <h2>{{{title}}}</h2>
             <table>
             <input name="fullname" type="text"  value= {{{fullname}}}/><br/>
             <input name="dob" type="number" value= dob maxlength="8" /><br/>
-            <label for="id_proof">Choose ID Proof </label><select name="id_proof">
+            <label for="id_proof">Choose ID Proof </label><select name="id_proof" id="id_proof">
                 <option value="">select
                 </option>
                 <option value="pan">PAN
@@ -49,7 +34,7 @@
                 </option>
             </select>
             <input name="idproofnumber" type="text" placeholder="ID Proof Number" /><br/>
-            <label for="address_proof">Choose Address Proof</label><select name="address_proof">
+            <label for="address_proof">Choose Address Proof</label><select name="address_proof" id="address_proof">
                 <option value="">select
                 </option>
                 <option value="aadhar">Aadhar
