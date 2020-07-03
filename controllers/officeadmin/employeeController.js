@@ -26,13 +26,16 @@ exports.register = function(req, res){
             else{
                 var stringval = JSON.stringify(data);
                 var objectval = JSON.parse(stringval);
-                var id1 = objectval[0]['employeeid'];
+                var id1 = objectval[0]['employeeid'].toString();
+                id1 = id1.substr(-2);
                 id = parseInt(id1) + 1;
-                var ydate = Date.now();
-                var year = ydate.getFullYear();
-                //var id = parseInt(id1) + 1;
+                if(id < 10){
+                    id= "0"+id.toString();
+                }
+                var year = new Date().getFullYear();
+                var emid = year+id.toString();
                 console.log(id);
-                res.render('emp_registration', {title : 'Register New Employee', msg: message, msg2: message2, empid: id});
+                res.render('emp_registration', {title : 'Register New Employee', msg: message, msg2: message2, empid: emid});
             }
         })
         
