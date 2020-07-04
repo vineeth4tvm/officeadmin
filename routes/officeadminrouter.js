@@ -7,6 +7,8 @@ var employeeController = require('../controllers/officeadmin/employeeController'
 
 router.get('/home', officeadminController.home);
 
+router.get('/', officeadminController.login);
+
 router.get('/login', officeadminController.login);
 
 router.get('/logout', officeadminController.logout);

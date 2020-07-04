@@ -18,13 +18,13 @@ var employeeregistrationSchema = new Schema({
         type: String, required: true
     },
     idproofnumber:{
-        type: String, required: true
+        type: String, required: true, unique: true
     },
     address_proof:{
         type: String, required: true
     },
     addressproofnumber:{
-        type: String, required: true
+        type: String, required: true, unique: true
     },
     address1:{
         type: String, required: true
@@ -39,10 +39,10 @@ var employeeregistrationSchema = new Schema({
         type: String, required: true
     },
     mobile:{
-        type: String, required: true
+        type: String, required: true, unique: true
     },
     email:{
-        type: String, required: true
+        type: String, required: true, unique: true
     },
     guardian_name:{
         type: String, required: true
@@ -71,6 +71,10 @@ var employeeregistrationSchema = new Schema({
         required: true
     },
     employeedesignation:{
+        type: String,
+        required: true
+    },
+    employmentstatus:{
         type: String,
         required: true
     }
