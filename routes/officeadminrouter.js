@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var officeadminController = require('../controllers/officeadminController');
+var officeadminController = require('../controllers/officeadmincontroller');
 var employeeController = require('../controllers/officeadmin/employeeController');
-//require('../models/webquery');
-/* Post web query. */
+
 
 router.get('/home', officeadminController.home);
 
@@ -19,6 +18,8 @@ router.get('/register', employeeController.register);
 
 router.post('/register', employeeController.saveemployee);
 
-router.get('/editemployee', employeeController.edit);
+//router.get('/editemployee', employeeController.edit);
+
+router.get('/deleteemployee', employeeController.delete);
 
 module.exports = router;

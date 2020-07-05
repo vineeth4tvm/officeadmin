@@ -117,20 +117,56 @@ exports.saveemployee = function(req, res){
     }
 }
 
-exports.edit = function(req, res){
+exports.delete = function(req, res){
     if(!req.session.username){
         req.session.destroy();
         res.redirect('/officeadmin/login?error=notsignedin');
     }
-    if(req.query.username){
+    else if(req.query.employeeid){
+        var employeeid = parseInt(req.query.employeeid);
+        console.log(employeeid);
+        if(isNaN(employeeid)){
+            console.log('Bad value given as employee id');
+            message = 'The userid you have entered is wrong. Please verify and try again!';
+            res.render('deleteemployee', {message: message});
+        }
+        else { 
+            employeeregistrationmodel.findOne({employeeid : employeeid}, 'employeeid', function (err, data){
+            if (err) {
+                console.log('Could not connect to the database because :'+err);
+                message = 'Could not connect to database because : '+err;
+                res.render('deleteemployee', {message: message});        
+            }
+            else if(data == null){
+                
+                console.log('Could not find the requested employee because :'+err);
+                message = 'The user id '+employeeid+' does not exist.</br>It may have already been deleted';
+                res.render('deleteemployee', {message: message});
+                }
+            else{
+                console.log(data);
+                employeeregistrationmodel.deleteOne({employeeid : employeeid}, function(err){
+                    if(err){
+                        console.log('Could not delete the requested employee because :'+err)
+                        message = 'The user id '+employeeid+' could not be deleted.</br>It may have already been deleted</br>'+err;
+                        res.render('deleteemployee', {message: message});
+                    }
+                    else{
+                        console.log('The employee you requested '+employeeid+' has been successfully deleted')
+                        message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
+                        res.render('deleteemployee', {message: message});
+                    }
+                }); 
+            }
+          
+        });
+    }
+    }
+        else{
 
-    }
-    else{
-        var err = [];
-        err.status = 'Bad URL';
-        err.stack = 'Please check the link that you clicked';
-        res.render('error', {message: 'The page you are looking for could not be found', error : err} )
-    }
- 
-    
+            console.log('employeeid not given in url '+employeeid+' has been successfully deleted')
+                        message = 'The employee id has not been selected.</br>Please go back and make sure you click on a valid link';
+                        res.render('deleteemployee', {message: message});
+                    }
+        }
 }
