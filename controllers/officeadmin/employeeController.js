@@ -169,4 +169,3 @@ exports.delete = function(req, res){
                         res.render('deleteemployee', {message: message});
                     }
         }
-}
