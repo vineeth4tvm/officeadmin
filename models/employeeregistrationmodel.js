@@ -77,6 +77,10 @@ var employeeregistrationSchema = new Schema({
     employmentstatus:{
         type: String,
         required: true
+    },
+    joiningdate:{
+        type: Number,
+        required: true
     }
 });
 

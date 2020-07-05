@@ -74,6 +74,7 @@ exports.saveemployee = function(req, res){
         employeeregistrationmodel1.updated_on = Date.now();
         employeeregistrationmodel1.employeedesignation = req.body.employeedesignation;
         employeeregistrationmodel1.employmentstatus = req.body.employmentstatus;
+        employeeregistrationmodel1.joiningdate = req.body.joiningdate;
         employeeregistrationmodel1.save(function (err, data){
             if(err){
                 console.log('Error : '+err);
@@ -104,7 +105,8 @@ exports.saveemployee = function(req, res){
                  updated_by : data.updated_by, 
                  updated_on : data.updated_on, 
                  employeedesignation : data.employeedesignation,
-                 employmentstatus : data.employmentstatus
+                 employmentstatus : data.employmentstatus,
+                 joiningdate : data.joiningdate
                  })
             
             }

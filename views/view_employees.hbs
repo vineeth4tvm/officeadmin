@@ -1,0 +1,7 @@
+<table>
+    <tr><tr><th>Employee Name</th><th>Designation</th><th>Employee since</th><th>View More</th><th>Edit</th><th>Remove</th></tr>
+    {{#each employee}}
+     <tr><td>{{this.fullname}}</td><td>{{this.joiningdate}}</td><td><a href="employeeprofile?employeeid={{this.employeeid}}">View More</a></td><td><a href="editemployee?employeeid={{this.employeeid}}">Edit</a></td><td><a href="deleteemployee?employeeid={{this.employeeid}}"></a></td></tr>
+    {{/each}}
+
+</table>
