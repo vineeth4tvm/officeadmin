@@ -18,7 +18,9 @@ router.get('/register', employeeController.register);
 
 router.post('/register', employeeController.saveemployee);
 
-//router.get('/editemployee', employeeController.edit);
+router.get('/editemployee', employeeController.edit);
+
+router.get('/viewemployees', employeeController.view);
 
 router.get('/deleteemployee', employeeController.delete);
 

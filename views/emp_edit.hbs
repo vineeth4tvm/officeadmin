@@ -1,5 +1,5 @@
-<html><head>
-    <title>{{{ title }}}</title>
+<head>
+    <title>Edit Employee {{data.fullname}}</title>
     <style type="text/css">
         input{
             margin-top: 5px;
@@ -8,17 +8,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
      $(document).ready(function(){            
-            $('#id_proof > option[value="{{{id_proof}}}]').attr("selected", "selected");
-            $('#address_proof > option[value="{{{address_proof}}}]').attr("selected", "selected");
-    });
+            $('#id_proof > option[value="{{{data.id_proof}}}"]').attr("selected", "selected");
+            $('#address_proof > option[value="{{{data.address_proof}}}"]').attr("selected", "selected");
+            $('#employmentstatus > option[value="{{{data.employmentstatus}}}"]').attr("selected", "selected");
+        });
     </script>
     </head>
     <body>
-        <form action="register" method="POST">
-            <h2>{{{title}}}</h2>
+
+        <form action="update" method="POST">
+            <h2>Edit Employee Profile {{{data.fullname}}}</h2>
             <table>
-            <input name="fullname" type="text"  value= {{{fullname}}}/><br/>
-            <input name="dob" type="number" value= dob maxlength="8" /><br/>
+            <label>Fullname </label><input name="fullname" type="text"  value= "{{data.fullname}}"/><br/>
+            <label>Date of birth </label><input name="dob" type="number" maxlength="8" value="{{data.dob}}" /><br/>
             <label for="id_proof">Choose ID Proof </label><select name="id_proof" id="id_proof">
                 <option value="">select
                 </option>
@@ -33,8 +35,8 @@
                 <option value="birthcertificate">Birth Certificate
                 </option>
             </select>
-            <input name="idproofnumber" type="text" placeholder="ID Proof Number" /><br/>
-            <label for="address_proof">Choose Address Proof</label><select name="address_proof" id="address_proof">
+            <label> Id Proof Number </label><input name="idproofnumber" type="text" placeholder="ID Proof Number" value="{{data.idproofnumber}}"/><br/>
+            <label for="address_proof">Choose Address Proof </label><select name="address_proof" id="address_proof">
                 <option value="">select
                 </option>
                 <option value="aadhar">Aadhar
@@ -49,24 +51,28 @@
                 </option>
             </select>
 
-            <input name="addressproofnumber" type="text" placeholder="Adress Proof Number" /><br/>
-            <input name="address1" type="text" placeholder="Adress line 1" />
-            <input name="address2" type="text" placeholder="Adress line 2" />
-            <input name="address3" type="text" placeholder="Adress line 3" /><br/>
-            <input name="pin" type="text" placeholder="Pin Code" /><br/>
-            <input name="mobile" type="tel" placeholder="Mobile Number" /><br/>
-            <input name="email" type="email" placeholder="Email ID" /><br/>
-            <input name="guardian_name" type="text" placeholder="Guardian Full Name" />
-            <input name="guardian_phone" type="text" placeholder="Guardian Phone" /><br/>
-            <textarea name="guardian_address" placeholder="Guardian Full Address"></textarea><br/>
+            <label> Address Proof Number </label><input name="addressproofnumber" type="text" placeholder="Adress Proof Number" value="{{data.addressproofnumber}}"/><br/>
+            <label>Address Lane 1 </label><input name="address1" type="text" placeholder="Adress line 1" value="{{data.address1}}"/>
+            <label> Address Lane 2 </label><input name="address2" type="text" placeholder="Adress line 2" value="{{data.address2}}" />
+            <label> Address Lane 3 </label><input name="address3" type="text" placeholder="Adress line 3" value="{{data.address3}}"/><br/>
+            <label>PIN Code </label><input name="pin" type="text" placeholder="Pin Code" value="{{data.pin}}" /><br/>
+            <label>Email ID </label><input name="email" type="email" placeholder="Email ID"  value="{{data.email}}" /><br/>
+            <label>Guardian Full Name </label><input name="guardian_name" type="text" placeholder="Guardian Full Name" value="{{data.guardian_name}}"/>
+            <label> Guardian Phone </label><input name="guardian_phone" type="text" placeholder="Guardian Phone" value="{{data.guardian_phone}}" /><br/>
+            <p><label>Guardian full address</label></br><textarea name="guardian_address" placeholder="Guardian Full Address" >{{data.guardian_address}}</textarea><br/></p>
             <label>Upload Documents:</label><br/>
             <label>Id Proof</label><input type="file" name="idfile" /><br/>
             <label>Address Proof</label><input type="file" name="addressfile" /><br/>
             <label>Passport Size Photo</label><input type="file" name="photo" /><br/>
-            <label for="employeeid">Employee ID</label><input type="number" name="employeeid"></br>
+            <label for="employeeid">Employee ID </label><input type="number" name="employeeid" value="{{data.employeeid}}"></br>
+            <label>Employee Designation</label><select name="employmentstatus" id="employmentstatus">
+                <option value="">select</option>
+                <option value="employed">employed</option>
+                <option value="suspended">suspended</option>
+                <option value="resigned">resigned</option>
+            </select>
+            <label> Joining Date </label><input type="number" name="joiningdate" value="{{data.joiningdate}}">
             <input type="submit" value="submit" />
         </table>
         </form>
-        <ul><li><a href="/officeadmin/home">Admin Home</a></li><li><a href="logout">Logout</a></li></ul>
-    </body>
-</html>
+ 

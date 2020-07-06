@@ -24,6 +24,8 @@ exports.register = function(req, res){
                 console.log(err);
             }
             else{
+                var id = "01";
+                if(data != ''){
                 var stringval = JSON.stringify(data);
                 var objectval = JSON.parse(stringval);
                 var id1 = objectval[0]['employeeid'].toString();
@@ -32,6 +34,7 @@ exports.register = function(req, res){
                 if(id < 10){
                     id= "0"+id.toString();
                 }
+            }
                 var year = new Date().getFullYear();
                 var emid = year+id.toString();
                 console.log(id);
@@ -170,4 +173,101 @@ exports.delete = function(req, res){
                         message = 'The employee id has not been selected.</br>Please go back and make sure you click on a valid link';
                         res.render('deleteemployee', {message: message});
                     }
+}
+
+exports.edit = function(req, res){
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+
+    else if(req.query.employeeid){
+        var employeeid = parseInt(req.query.employeeid);
+        console.log(employeeid);
+        if(isNaN(employeeid)){
+            console.log('Bad value given as employee id');
+            var error = [];
+            error.status = 'The userid you have entered is wrong. Please verify and try again!';
+            res.render('error', {error: error});
         }
+        else { 
+            employeeregistrationmodel.findOne({employeeid : employeeid}, {}, function (err, data){
+            if (err) {
+                console.log('Could not connect to the database because :'+err);
+                var error = [];
+                error.status = 'Could not connect to the database because :'+err;
+                error.stack = 'error in fetching employee details.</br>Please check your internet connection';
+                res.render('error', {error: error});
+            }
+            else if(data == null){
+                
+                console.log('Could not find the requested employee because :'+err);
+                
+                var error = [];
+                error.status = 'Could not find the requested employee because :'+err;
+                error.stack = 'Error in fetching employee details.</br>Please check your internet connection';
+                res.render('error', {error: error});
+                }
+            else{
+                console.log(data);
+                        //console.log('The employee you requested '+employeeid+' has been successfully deleted')
+                        //message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
+                    res.render('emp_edit', {data : data});
+                   
+                }; 
+            });
+        }
+          
+    }
+        else{
+
+            console.log('employeeid not given in url '+employeeid+' has been successfully deleted')
+                    var error = [];
+                    error.status = 'No employee id given in URL. Please check the link you clicked.'
+                    message = 'The employee id has not been selected.</br>Please go back and make sure you clicked on a valid link';
+                    res.render('error', {error: error, message : message});
+            }
+
+    }
+
+exports.view = function(req, res){
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+
+    employeeregistrationmodel.find({}, 'fullname employeedesignation joiningdate employmentstatus employeeid', function(err, data){
+        if(err){
+            var error = [];
+            error.status = 'server connection error';
+            error.stack = 'error in fetching employee list';
+            res.render('error', {error: error});
+        }
+
+
+        else{
+            var message = '';
+            if(data == ''){
+             message = 'No employees available in the database';   
+            }
+            else{
+                
+            data.forEach(part => {
+                var joiningdate = part.joiningdate.toString();
+                console.log('joiningdate : '+ joiningdate)
+                jyear = joiningdate.slice(0,4);
+                jmonth = joiningdate.slice(4,6);
+                jday = joiningdate.slice(6,8);
+                part['joiningdate'] = jday+' '+jmonth+' '+jyear;
+                console.log(jday+' '+jmonth+' '+jyear )
+            }); }
+
+            res.render('view_employees', {employee: data, message: message});
+
+        }
+    });
+
+}
+
+
+

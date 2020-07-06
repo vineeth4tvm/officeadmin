@@ -38,7 +38,7 @@ exports.login = function(req, res){
         }
         //console.log(error + errormsg);
     }
-    res.render('admin_login', {title : 'Admin login', error : errormsg});
+    res.render('admin_login', {layout: 'loginlayout.hbs', title : 'Admin login', error : errormsg});
 
 }
 
