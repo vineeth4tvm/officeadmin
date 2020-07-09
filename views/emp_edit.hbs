@@ -16,8 +16,10 @@
     </head>
     <body>
 
-        <form action="update" method="POST">
+        <form action="editemployee" method="POST">
+            
             <h2>Edit Employee Profile {{{data.fullname}}}</h2>
+            <p>{{{message}}}</p><p>{{{message2}}}</p>
             <table>
             <label>Fullname </label><input name="fullname" type="text"  value= "{{data.fullname}}"/><br/>
             <label>Date of birth </label><input name="dob" type="number" maxlength="8" value="{{data.dob}}" /><br/>
@@ -57,15 +59,20 @@
             <label> Address Lane 3 </label><input name="address3" type="text" placeholder="Adress line 3" value="{{data.address3}}"/><br/>
             <label>PIN Code </label><input name="pin" type="text" placeholder="Pin Code" value="{{data.pin}}" /><br/>
             <label>Email ID </label><input name="email" type="email" placeholder="Email ID"  value="{{data.email}}" /><br/>
+            <label>Mobile </label><input name="mobile" type="tel" placeholder="Mobile Number"  value="{{data.mobile}}" /><br/>
             <label>Guardian Full Name </label><input name="guardian_name" type="text" placeholder="Guardian Full Name" value="{{data.guardian_name}}"/>
             <label> Guardian Phone </label><input name="guardian_phone" type="text" placeholder="Guardian Phone" value="{{data.guardian_phone}}" /><br/>
-            <p><label>Guardian full address</label></br><textarea name="guardian_address" placeholder="Guardian Full Address" >{{data.guardian_address}}</textarea><br/></p>
-            <label>Upload Documents:</label><br/>
+            <p><label>Guardian full address </label></br><textarea name="guardian_address" placeholder="Guardian Full Address" >{{data.guardian_address}}</textarea><br/></p>
+            <label>Upload Documents: </label><br/>
             <label>Id Proof</label><input type="file" name="idfile" /><br/>
             <label>Address Proof</label><input type="file" name="addressfile" /><br/>
             <label>Passport Size Photo</label><input type="file" name="photo" /><br/>
             <label for="employeeid">Employee ID </label><input type="number" name="employeeid" value="{{data.employeeid}}"></br>
-            <label>Employee Designation</label><select name="employmentstatus" id="employmentstatus">
+            <label for="employeedesignation">Designation</label><select name="employeedesignation">
+                <option value="">Select</option>
+                <option value="telecaller">Telecaller</option>
+            </select></br>
+            <label>Employment Status</label><select name="employmentstatus" id="employmentstatus">
                 <option value="">select</option>
                 <option value="employed">employed</option>
                 <option value="suspended">suspended</option>

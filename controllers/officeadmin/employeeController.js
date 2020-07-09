@@ -87,29 +87,8 @@ exports.saveemployee = function(req, res){
             else{
             res.render('employee_success', {
                  title : 'Employee Created!',
-                 fullname : data.fullname,
-                 dob: data.dob, 
-                 id_proof: data.id_proof,
-                 idproofnumber: data.idproofnumber, 
-                 address_proof: data.address_proof,
-                 addressproofnumber : data.addressproofnumber,
-                 address1 : data.address1,
-                 address2 : data.address2,
-                 address3 : data.address3,
-                 pin : data.pin,
-                 mobile: data.mobile,
-                 email : data.email,
-                 guardian_name : data.guardian_name,
-                 guardian_phone : data.guardian_phone,
-                 guardian_address : data.guardian_address,
-                 employeeid : data.employeeid,
-                 created_by : data.created_by,
-                 created_on : data.created_on,
-                 updated_by : data.updated_by, 
-                 updated_on : data.updated_on, 
-                 employeedesignation : data.employeedesignation,
-                 employmentstatus : data.employmentstatus,
-                 joiningdate : data.joiningdate
+                 titlemsg: 'New Employee has been successfully Created',
+                 employee : data
                  })
             
             }
@@ -180,8 +159,18 @@ exports.edit = function(req, res){
         req.session.destroy();
         res.redirect('/officeadmin/login?error=notsignedin');
     }
+    var message = '';
+    var message2 = '';
+    if(req.query.emptyfields == 'true'){
+        message = 'Please fill in all details and try again';
+    }
 
-    else if(req.query.employeeid){
+    if(req.query.error){
+        console.log(req.query.error);
+        message2 = req.query.error;
+    }
+
+    if(req.query.employeeid){
         var employeeid = parseInt(req.query.employeeid);
         console.log(employeeid);
         if(isNaN(employeeid)){
@@ -212,7 +201,7 @@ exports.edit = function(req, res){
                 console.log(data);
                         //console.log('The employee you requested '+employeeid+' has been successfully deleted')
                         //message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
-                    res.render('emp_edit', {data : data});
+                    res.render('emp_edit', {data : data, message: message, message2: message2});
                    
                 }; 
             });
@@ -260,5 +249,81 @@ exports.view = function(req, res){
 
 }
 
+exports.update = function(req, res){
 
+    //employeeregistrationmodel2 = new employeeregistrationmodel;
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+    else {
+    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation ){
+        employeeregistrationmodel.updateOne({employeeid : req.body.employeeid} , {
+        fullname : req.body.fullname,
+        dob : req.body.dob,
+        id_proof : req.body.id_proof,
+        idproofnumber : req.body.idproofnumber,
+        address_proof : req.body.address_proof,
+        addressproofnumber : req.body.addressproofnumber,
+        address1 : req.body.address1,
+        address2 : req.body.address2,
+        address3 : req.body.address3,
+        pin : req.body.pin,
+        mobile : req.body.mobile,
+        email : req.body.email,
+        guardian_name : req.body.guardian_name,
+        guardian_phone : req.body.guardian_phone,
+        guardian_address : req.body.guardian_address,
+        updated_by : req.session.username,
+        updated_on : Date.now(),
+        employeedesignation : req.body.employeedesignation,
+        employmentstatus : req.body.employmentstatus,
+        joiningdate : req.body.joiningdate,
+        },function (err, data){
+            if(err){
+                console.log('Error : '+err);
+                res.redirect('/officeadmin/editemployee?employeeid='+req.body.employeeid+'&emptyfields=true&&error='+err);
+            }
+
+            else{
+            
+                employeeregistrationmodel.findOne({employeeid : req.body.employeeid}, {}, function (err, data){
+                    if (err) {
+                        console.log('Could not connect to the database because :'+err);
+                        var error = [];
+                        error.status = 'Could not connect to the database because :'+err;
+                        error.stack = 'error in fetching employee details.</br>Please check your internet connection';
+                        res.render('error', {error: error});
+                    }
+                    else if(data == null){
+                        
+                        console.log('Could not find the requested employee because :'+err);
+                        
+                        var error = [];
+                        error.status = 'Could not find the requested employee because :'+err;
+                        error.stack = 'Error in fetching employee details.</br>Please check your internet connection';
+                        res.render('error', {error: error});
+                        }
+                    else{
+                        console.log(data);
+                                //console.log('The employee you requested '+employeeid+' has been successfully deleted')
+                                //message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
+                            res.render('employee_success', {employee : data});
+                           
+                        }; 
+                });
+
+
+
+
+            }
+        });
+    }
+
+    else{
+            res.redirect('/officeadmin/editemployee?employeeid='+req.body.employeeid+'&emptyfields=true');
+        } 
+    }
+
+}
 
