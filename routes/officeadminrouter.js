@@ -26,4 +26,6 @@ router.get('/deleteemployee', employeeController.delete);
 
 router.post('/editemployee', employeeController.update);
 
+router.get('/employeeprofile', employeeController.profile);
+
 module.exports = router;

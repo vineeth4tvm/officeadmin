@@ -225,7 +225,7 @@ exports.view = function(req, res){
         res.redirect('/officeadmin/login?error=notsignedin');
     }
 
-    employeeregistrationmodel.find({}, 'fullname employeedesignation joiningdate employmentstatus employeeid', function(err, data){
+    else { employeeregistrationmodel.find({}, 'fullname employeeid employeedesignation joiningdate employmentstatus employeeid', function(err, data){
         if(err){
             var error = [];
             error.status = 'server connection error';
@@ -246,6 +246,7 @@ exports.view = function(req, res){
             res.render('view_employees', {employee: data, message: message});
         }
     });
+    }
 
 }
 
@@ -325,5 +326,55 @@ exports.update = function(req, res){
         } 
     }
 
+}
+
+
+exports.profile = function(req, res){
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+    else if(req.query.employeeid){
+        var employeeid = parseInt(req.query.employeeid);
+        console.log(employeeid);
+        if(isNaN(employeeid)){
+            console.log('Bad value given as employee id');
+            message = 'Bad url. The userid you have entered is wrong. Please verify and try again!';
+            res.render('error', {message: message});
+        }
+        else { 
+            employeeregistrationmodel.findOne({employeeid : employeeid}, {}, function (err, data){
+            if (err) {
+                console.log('Could not connect to the database because :'+err);
+                message = 'Could not connect to database because : '+err;
+                res.render('error', {message: message});        
+            }
+            else if(data == null){
+                
+                console.log('Could not find the requested employee because :'+err);
+                message = 'The user id '+employeeid+' does not exist. It may have already been deleted';
+                res.render('error', {message: message});
+                }
+            else{
+
+                res.render('employeeprofile', {employee : data});
+               
+            }
+          
+        });
+    }
+    }
+
+    else{
+        var error = [];
+        var message = "Couldn't read employeeid.";
+        error.status = "Make sure you clicked on a valid link";
+        error.stack = 'You may report this error to admin';
+
+        console.log('employeeid not given in url ')
+        message = 'The employee id has not been selected. </br>Please go back and make sure you clicked on a valid link';
+        res.render('error', {message: message, error: error});
+    
+    }
 }
 
