@@ -73,7 +73,6 @@ exports.postmark = function(req, res){
                     var day = date1.getDate; 
                     var attendancemodel1 = new attendancemodel;
                     attendancemodel1.employeeid = employeeid;
-                    attendancemodel1.date =
                     employeeregistrationmodel.save( function(err, data){
                         if(err){
                             console.log('Could not delete the requested employee because :'+err)
