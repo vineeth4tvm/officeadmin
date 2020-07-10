@@ -31,3 +31,23 @@ exports.mark = function(req, res){
     }
 
 }
+
+exports.postmark = function(req, res){
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+    else if(req.body.employeeid && req.body.dob && req.body.time){
+        
+
+    }
+
+    else{
+        if(req.body.time){
+            res.render('attendance/mark_attendance', {time: req.body.time, message : 'Please fill in all details'})
+        }
+        else{
+            res.render('attendance/mark_attendance', {time: 'in', message : 'Please fill in all details'});
+        }
+    }
+}
