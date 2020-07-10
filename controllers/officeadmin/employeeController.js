@@ -309,7 +309,7 @@ exports.update = function(req, res){
                         console.log(data);
                                 //console.log('The employee you requested '+employeeid+' has been successfully deleted')
                                 //message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
-                            res.render('employee_success', {employee : data});
+                            res.render('employee_success', {employee : data, message: 'Changes saved successfully'});
                            
                         }; 
                 });

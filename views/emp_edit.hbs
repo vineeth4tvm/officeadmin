@@ -11,6 +11,7 @@
             $('#id_proof > option[value="{{{data.id_proof}}}"]').attr("selected", "selected");
             $('#address_proof > option[value="{{{data.address_proof}}}"]').attr("selected", "selected");
             $('#employmentstatus > option[value="{{{data.employmentstatus}}}"]').attr("selected", "selected");
+            $('#employeedesignation > option[value="{{{data.employeedesignation}}}"]').attr("selected", "selected");
         });
     </script>
     </head>
@@ -22,7 +23,7 @@
             <p>{{{message}}}</p><p>{{{message2}}}</p>
             <table>
             <label>Fullname </label><input name="fullname" type="text"  value= "{{data.fullname}}"/><br/>
-            <label>Date of birth </label><input name="dob" type="number" maxlength="8" value="{{data.dob}}" /><br/>
+            <label>Date of birth in YYYYMMDD</label><input name="dob" type="number" maxlength="8" value="{{data.dob}}" /><br/>
             <label for="id_proof">Choose ID Proof </label><select name="id_proof" id="id_proof">
                 <option value="">select
                 </option>
@@ -68,7 +69,7 @@
             <label>Address Proof</label><input type="file" name="addressfile" /><br/>
             <label>Passport Size Photo</label><input type="file" name="photo" /><br/>
             <label for="employeeid">Employee ID </label><input type="number" name="employeeid" value="{{data.employeeid}}"></br>
-            <label for="employeedesignation">Designation</label><select name="employeedesignation">
+            <label for="employeedesignation">Designation</label><select name="employeedesignation" id="employeedesignation">
                 <option value="">Select</option>
                 <option value="telecaller">Telecaller</option>
             </select></br>
@@ -78,7 +79,7 @@
                 <option value="suspended">suspended</option>
                 <option value="resigned">resigned</option>
             </select>
-            <label> Joining Date </label><input type="number" name="joiningdate" value="{{data.joiningdate}}"></br>
+            <label> Joining Date in YYYYMMDD</label><input type="number" name="joiningdate" value="{{data.joiningdate}}"></br>
             <input type="submit" value="submit" />
         </table>
         </form>
