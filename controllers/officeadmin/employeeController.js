@@ -37,7 +37,7 @@ exports.register = function(req, res){
             }
                 var year = new Date().getFullYear();
                 var emid = year+id.toString();
-                console.lo</tr>g(id);
+                console.log(id);
                 res.render('emp_registration', {title : 'Register New Employee', msg: message, msg2: message2, empid: emid});
             }
         })

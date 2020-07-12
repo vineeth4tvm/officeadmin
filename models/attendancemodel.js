@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var mongoDB2 = 'mongodb+srv://vineeth4tvm:bluebridge@cluster0-skw0g.mongodb.net/officeadmin?retryWrites=true&w=majority';
-mongoose.connect(mongoDB1, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(mongoDB2, { useUnifiedTopology: true, useNewUrlParser: true });
 mongoose.set('useCreateIndex', true);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -15,16 +15,16 @@ var attendanceSchema = new Schema({
         type: String, required: true
     },
     intime:{
-        type: String, required: true
+        type: String
     },
     outtime:{
-        type: String, required: true, unique: true
+        type: String
     },
     markedtime:{
         type: String, required: true
     },
     markedby:{
-        type: String, required: true, unique: true
+        type: String, required: true
     },
     modifiedby:{
         type: String, required: true
