@@ -9,10 +9,10 @@ var Schema = mongoose.Schema;
 
 var attendanceSchema = new Schema({
     employeeid:{
-        type: Number, required: true
+        type: Number, 
     },
     date : {
-        type: String, required: true
+        type: String, 
     },
     intime:{
         type: String
@@ -21,16 +21,16 @@ var attendanceSchema = new Schema({
         type: String
     },
     markedtime:{
-        type: String, required: true
+        type: String, 
     },
     markedby:{
-        type: String, required: true
+        type: String, 
     },
     modifiedby:{
-        type: String, required: true
+        type: String, 
     },
     modifiedtime:{
-        type: String, required: true
+        type: String,
     }
 });
 
