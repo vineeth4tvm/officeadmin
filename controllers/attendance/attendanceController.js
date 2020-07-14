@@ -2,10 +2,53 @@ var attendancemodel = require('../../models/attendancemodel');
 var employeeregistrationmodel = require('../../models/employeeregistrationmodel');
 const e = require('express');
 const session = require('express-session');
+const attendance = require('../../models/attendancemodel');
 
 exports.home = function(req, res){
-    res.render('attendance/attendancehome');
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+    }
+    else {
+        if(req.query.date){
+
+            var viewdate = parseInt(req.query.date);
+            if(isNaN(viewdate)){
+                res.render('error', {message: 'invalid value given as date'});
+            }
+            else{
+                employeeregistrationmodel.find({}, function(err, empdata){
+                    if(err){
+                        res.render('error', {message : 'couldnt connect to databasae because '+err});
+                    }
+                    if(!empdata){
+                        res.render('attendancehome', message: 'No employees found in the database');
+                    }
+
+                    else{
+
+                
+                    var empresult = [];
+                    
+                    result.employeename =
+                    attendancemodel.find({date: viewdate}, function(err, attdata){
+                         
+                    var attresult = [];                       
+
+
+                    })
+                }
+             })
+
+
+        }
+    
+        else{
+        res.render('attendance/attendancehome');
+        }
+    }
 }
+
 exports.mark = function(req, res){
     if(!req.session.username){
         req.session.destroy();
@@ -14,7 +57,7 @@ exports.mark = function(req, res){
     else {
             
         if(req.query.time){
-        
+        //show attendance marking page with correct type according to the type value in the clicked link
             if(req.query.time == 'in'){
                 res.render('attendance/mark_attendance', {time: 'intime'})
             }
@@ -27,7 +70,7 @@ exports.mark = function(req, res){
                 res.render('attendance/choose_attendance');
             }
         }
-
+        //show choose attendance type page if timetype is not given in url
         else {
             res.render('attendance/choose_attendance');
         }
@@ -37,14 +80,18 @@ exports.mark = function(req, res){
 
 }
 
+//processing work part of attendance mark request
+
 exports.postmark = function(req, res){
    if(!req.session.username){
      req.session.destroy();
      res.redirect('/officeadmin/login?error=notsignedin');
   }
  else{
+     //if all values are receieved from post request then proceed to marking process
      if(req.body.employeeid && req.body.dob && req.body.time){
         var employeeid = parseInt(req.body.employeeid);
+        //Check if Nan value is present in employee id. often due to bad values in form data [non numeric values] db requests can fail.
         if(isNaN(employeeid)){
             if(req.body.time){
                 res.render('attendance/mark_attendance', {time: req.body.time, message : 'Please fill in all details'})
@@ -53,9 +100,9 @@ exports.postmark = function(req, res){
                 res.render('attendance/mark_attendance', {time: 'in', message : 'Please fill in all details'});
             }
         }
-
+        //update existing attendance collection entry/document whose value is '' with present time
         else{
-            
+            //checking if emp id is correct
             employeeregistrationmodel.findOne({employeeid : employeeid}, 'employeeid dob', function (err, data){
                 if (err) {
                     console.log('Could not connect to the database because :'+err);
@@ -83,7 +130,7 @@ exports.postmark = function(req, res){
                     var minutes1 = date1.getUTCMinutes().toString();
                     var seconds1 =  date1.getUTCSeconds().toString();
                     var timestring= hours1+' '+minutes1+' '+seconds1;
-
+                        //checking if attendance entry exists for given date.
                     attendancemodel.count({employeeid : employeeid, date : datestring}, function(err, count){
                     
                     
@@ -104,7 +151,7 @@ exports.postmark = function(req, res){
                         else{
                             res.render('error', {message: 'The time type given in the request is invalid. Set either In or Out'})
                         }
-                    
+                 // get data from attendance entry to find if already marked or yet to be marked  
                 attendancemodel.findOne({employeeid : employeeid, date: datestring}, function(err, data){
                         if(err){
                             res.render('error', {message: 'error in connection :'+err});
@@ -117,6 +164,8 @@ exports.postmark = function(req, res){
                         }
                         else if (data[timetype] == ''){
                             console.log('data timetype is '+typeof(data[timetype]));
+                            
+                            //update the attendance entry  timwetype with time.
                             attendancemodel.updateOne({employeeid : employeeid},{
                                 
                             [timetype]: timestring,
@@ -139,11 +188,16 @@ exports.postmark = function(req, res){
                         }
                     })
                 }
-                
+
+              //create a new attendance entry if time is not marked in timetype column ie, intime or outtime  and timeype column value is not '',
+              //then create a collection entry with all details with value '' for the other time type
+
                 else {
+
                     var timetype = req.body.time;
                     var outtime = '';
                     var intime = '';
+
                     if(timetype == 'intime'){
                         
                         intime = timestring;
