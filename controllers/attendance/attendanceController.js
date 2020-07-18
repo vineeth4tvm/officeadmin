@@ -17,28 +17,38 @@ exports.home = function(req, res){
                 res.render('error', {message: 'invalid value given as date'});
             }
             else{
-                employeeregistrationmodel.find({}, function(err, empdata){
+                employeeregistrationmodel.find({},'fullname employeedesignation employeeid', function(err, data){
                     if(err){
                         res.render('error', {message : 'couldnt connect to databasae because '+err});
                     }
-                    if(!empdata){
-                        res.render('attendancehome', message: 'No employees found in the database');
+                    if(!data){
+                        res.render('attendancehome',{message: 'No employees found in the database'});
                     }
 
                     else{
-
-                
-                    var empresult = [];
+                    var employeelist = {};
                     
-                    result.employeename =
+                    for (var key in json) {
+                        if (json.hasOwnProperty(key)) {
+                          alert(json[key].id);
+                          alert(json[key].msg);
+                        }
+                    }
+
+
+                    console.log('Date in employee list is : '+ employeelist);
+                    var empresult = employeelist['1'].fullname;
+                    
+                    
                     attendancemodel.find({date: viewdate}, function(err, attdata){
                          
                     var attresult = [];                       
 
-
+                    res.render('attendance/attendancehome', {message: empresult})
                     })
                 }
              })
+            }
 
 
         }
