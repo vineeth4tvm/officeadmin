@@ -27,30 +27,80 @@ exports.home = function(req, res){
 
                     else{
                     var employeelist = {};
-                    
-                    for (var key in json) {
-                        if (json.hasOwnProperty(key)) {
-                          alert(json[key].id);
-                          alert(json[key].msg);
+                    attendancemodel.find({date: viewdate}, function(err, attdata){
+                        
+                        var key = 0 ;
+                        var attresult = {};   
+                                            
+                        
+                        for (const property in data) {
+                            
+                            var subattdata = attdata.filter(item => item.employeeid == `${data[property]['employeeid']}`);
+                            
+                            
+                            console.log(typeof(subattdata[0]));
+                            if(subattdata.length){
+                            console.log('employee list empname: '+`${data[property]['fullname']}` +' , attdata empl id :  '+ subattdata[0]['employeeid']);
+                            if(`${data[property]['employeeid']}` == subattdata[0]['employeeid']){
+                               
+                                attresult[key] = {};
+
+                                attresult[key] = Array.from(subattdata);
+
+                                attresult[key][0]['fullname'] = `${data[property]['fullname']}`;
+                                
+                                
+                            }
+                            key++;
+                        
+                        }
+                        else{
+                            
+                            
+
                         }
                     }
 
+                        res.render('attendance/attendancehome');
+                        //{message: empresult}}
+                       
+                   
 
-                    console.log('Date in employee list is : '+ employeelist);
-                    var empresult = employeelist['1'].fullname;
+                    var date2 = new Date();
+                    //console.log('Date in employee list is : '+ attdata);
+                    //var empresult = employeelist['1'].fullname;
                     
+                    console.log(attresult);
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                     
-                    attendancemodel.find({date: viewdate}, function(err, attdata){
-                         
-                    var attresult = [];                       
-
-                    res.render('attendance/attendancehome', {message: empresult})
-                    })
-                }
-             })
+                        
+                        
+                        
+                    
+                    }
+                    ).lean()}
+                    
             }
 
-
+                )}
         }
     
         else{
@@ -130,7 +180,7 @@ exports.postmark = function(req, res){
                         var date1 = new Date;
                         var year1 = date1.getUTCFullYear();
                         year1 = year1.toString();
-                        var month1 = date1.getUTCMonth();
+                        var month1 = date1.getUTCMonth() + 1;
                         month1 = month1.toString();
                         var day1 = date1.getUTCDate();
                         day1 = day1.toString();
@@ -151,11 +201,11 @@ exports.postmark = function(req, res){
                     if(count == 1){
                     
                         if(timetype == 'intime'){
-                            outime = '';
+                            outime = 'na';
                             intime = timestring;
                         }
                         else if(timetype == 'outtime'){
-                            intime = '';
+                            intime = 'na';
                             outtime = timestring;
                         }
                         else{
@@ -172,7 +222,7 @@ exports.postmark = function(req, res){
                             var message = timetype.toUpperCase()+' already marked for '+employeeid+' at '+data[timetype];
                             res.render('attendance/mark_attendance', {time: req.body.time, message: message});
                         }
-                        else if (data[timetype] == ''){
+                        else if (data[timetype] == 'na'){
                             console.log('data timetype is '+typeof(data[timetype]));
                             
                             //update the attendance entry  timwetype with time.
@@ -205,8 +255,8 @@ exports.postmark = function(req, res){
                 else {
 
                     var timetype = req.body.time;
-                    var outtime = '';
-                    var intime = '';
+                    var outtime = 'na';
+                    var intime = 'na';
 
                     if(timetype == 'intime'){
                         
