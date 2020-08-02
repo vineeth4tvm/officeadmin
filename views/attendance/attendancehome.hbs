@@ -1,5 +1,11 @@
 <head>
 <title>Attendance Home</title>
 </head>
-<h3>Here, the day's (or last working day's) attendance details will show up</h3>
-<p>{{message}}</p>
+<h3>{{message}}</h3>
+
+<table>
+    <tr><th>ID</th><th>Name</th><th>In Time</td><th>Out time</td></tr>
+    {{#each attresult}}
+    <tr><td>{{this.employeeid}}</td><td>{{this.fullname}}</td><td>{{this.intime}}</td><td>{{this.outtime}}</td></tr>
+    {{/each}}
+</table>

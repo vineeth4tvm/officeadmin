@@ -17,7 +17,7 @@ exports.home = function(req, res){
                 res.render('error', {message: 'invalid value given as date'});
             }
             else{
-                employeeregistrationmodel.find({},'fullname employeedesignation employeeid', function(err, data){
+                employeeregistrationmodel.find({employmentstatus : 'employed'},'fullname employeedesignation employeeid', function(err, data){
                     if(err){
                         res.render('error', {message : 'couldnt connect to databasae because '+err});
                     }
@@ -45,9 +45,9 @@ exports.home = function(req, res){
                                
                                 attresult[key] = {};
 
-                                attresult[key] = Array.from(subattdata);
+                                attresult[key] = subattdata[0];
 
-                                attresult[key][0]['fullname'] = `${data[property]['fullname']}`;
+                                attresult[key]['fullname'] = `${data[property]['fullname']}`;
                                 
                                 
                             }
@@ -55,22 +55,28 @@ exports.home = function(req, res){
                         
                         }
                         else{
-                            
-                            
+                            attresult[key]={};
+                            attresult[key]= {fullname: `${data[property]['fullname']}`,
+                            employeeid : `${data[property]['employeeid']}`,
+                            intime: 'na',
+                            outtime: 'na',
+                            date: viewdate
+                            };
+                            key++; 
 
                         }
                     }
 
-                        res.render('attendance/attendancehome');
+                        res.render('attendance/attendancehome', {attresult: attresult, message :'Todays Attendance Status'});
                         //{message: empresult}}
                        
                    
 
-                    var date2 = new Date();
+                    //var date2 = new Date();
                     //console.log('Date in employee list is : '+ attdata);
                     //var empresult = employeelist['1'].fullname;
                     
-                    console.log(attresult);
+                    console.log(attresult[1]['fullname']);
                         
                         
                         
