@@ -11,8 +11,20 @@ exports.home = function(req, res){
     }
     else {
         if(req.query.date){
-
             var viewdate = parseInt(req.query.date);
+            var message = 'Status of Attendance for date '+viewdate;
+        }
+        else{
+            var date1 = new Date;
+            var year1 = date1.getUTCFullYear();
+            year1 = year1.toString();
+            var month1 = date1.getUTCMonth() + 1;
+            month1 = month1.toString();
+            var day1 = date1.getUTCDate();
+            day1 = day1.toString();
+            var viewdate = year1+month1+day1;
+            var message = 'Todays attendance status';
+        } 
             if(isNaN(viewdate)){
                 res.render('error', {message: 'invalid value given as date'});
             }
@@ -67,7 +79,7 @@ exports.home = function(req, res){
                         }
                     }
 
-                        res.render('attendance/attendancehome', {attresult: attresult, message :'Todays Attendance Status'});
+                        res.render('attendance/attendancehome', {attresult: attresult, message : message});
                         //{message: empresult}}
                        
                    
@@ -76,7 +88,7 @@ exports.home = function(req, res){
                     //console.log('Date in employee list is : '+ attdata);
                     //var empresult = employeelist['1'].fullname;
                     
-                    console.log(attresult[1]['fullname']);
+                    //console.log(attresult[1]['fullname']);
                         
                     
                     }
@@ -85,11 +97,8 @@ exports.home = function(req, res){
             }
 
                 )}
-        }
+        
     
-        else{
-        res.render('attendance/attendancehome');
-        }
     }
 }
 
@@ -179,29 +188,23 @@ exports.postmark = function(req, res){
                     
                     
                     var timetype = req.body.time;
+                    console.log('value of timetype is :'+timetype);
                     employeeid = req.body.employeeid;
                     date = datestring;
 
                     if(count == 1){
-                    
-                        if(timetype == 'intime'){
-                            outime = 'na';
-                            intime = timestring;
-                        }
-                        else if(timetype == 'outtime'){
-                            intime = 'na';
-                            outtime = timestring;
-                        }
-                        else{
+                        
+                        if(timetype != 'intime' && timetype != 'outtime') {
                             res.render('error', {message: 'The time type given in the request is invalid. Set either In or Out'})
                         }
-                 // get data from attendance entry to find if already marked or yet to be marked  
+                        else {
+                        // get data from attendance entry to find if already marked or yet to be marked  
                 attendancemodel.findOne({employeeid : employeeid, date: datestring}, function(err, data){
                         if(err){
                             res.render('error', {message: 'error in connection :'+err});
                         }    
                         console.log(timetype);
-                        if(data[timetype] != ""){
+                        if(data[timetype] != 'na'){
                             console.log('data timetype is '+typeof(data[timetype]));
                             var message = timetype.toUpperCase()+' already marked for '+employeeid+' at '+data[timetype];
                             res.render('attendance/mark_attendance', {time: req.body.time, message: message});
@@ -210,7 +213,7 @@ exports.postmark = function(req, res){
                             console.log('data timetype is '+typeof(data[timetype]));
                             
                             //update the attendance entry  timwetype with time.
-                            attendancemodel.updateOne({employeeid : employeeid},{
+                            attendancemodel.updateOne({employeeid : employeeid, date: datestring},{
                                 
                             [timetype]: timestring,
                             modifiedtime : timestring,
@@ -231,6 +234,7 @@ exports.postmark = function(req, res){
                             })
                         }
                     })
+                    }  
                 }
 
               //create a new attendance entry if time is not marked in timetype column ie, intime or outtime  and timeype column value is not '',
