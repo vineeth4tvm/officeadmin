@@ -78,28 +78,6 @@ exports.home = function(req, res){
                     
                     console.log(attresult[1]['fullname']);
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    
-                        
-                        
-                        
                     
                     }
                     ).lean()}
