@@ -4,6 +4,7 @@ const e = require('express');
 const session = require('express-session');
 const attendance = require('../../models/attendancemodel');
 
+//show attendance homepage with summary of present date attendance
 exports.home = function(req, res){
     if(!req.session.username){
         req.session.destroy();
@@ -102,6 +103,9 @@ exports.home = function(req, res){
     }
 }
 
+
+//show attendance marking page with correct type according to the type value in the clicked link
+
 exports.mark = function(req, res){
     if(!req.session.username){
         req.session.destroy();
@@ -141,9 +145,11 @@ exports.postmark = function(req, res){
      res.redirect('/officeadmin/login?error=notsignedin');
   }
  else{
+     
      //if all values are receieved from post request then proceed to marking process
      if(req.body.employeeid && req.body.dob && req.body.time){
         var employeeid = parseInt(req.body.employeeid);
+
         //Check if Nan value is present in employee id. often due to bad values in form data [non numeric values] db requests can fail.
         if(isNaN(employeeid)){
             if(req.body.time){
