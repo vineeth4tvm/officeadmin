@@ -78,6 +78,7 @@ exports.saveemployee = function(req, res){
         employeeregistrationmodel1.employeedesignation = req.body.employeedesignation;
         employeeregistrationmodel1.employmentstatus = req.body.employmentstatus;
         employeeregistrationmodel1.joiningdate = req.body.joiningdate;
+        employeeregistrationmodel1.salary = req.body.salary;
         employeeregistrationmodel1.save(function (err, data){
             if(err){
                 console.log('Error : '+err);
@@ -280,6 +281,7 @@ exports.update = function(req, res){
         employeedesignation : req.body.employeedesignation,
         employmentstatus : req.body.employmentstatus,
         joiningdate : req.body.joiningdate,
+        salary : req.body.salary
         },function (err, data){
             if(err){
                 console.log('Error : '+err);

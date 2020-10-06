@@ -81,6 +81,10 @@ var employeeregistrationSchema = new Schema({
     joiningdate:{
         type: Number,
         required: true
+    },
+    salary:{
+        type: Number,
+        required: true
     }
 });
 
