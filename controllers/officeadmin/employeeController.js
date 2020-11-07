@@ -1,4 +1,15 @@
 var employeeregistrationmodel = require('../../models/employeeregistrationmodel');
+var fs = require('fs');
+var path = require('path');
+var multer = require('multer');
+var storage = multer.diskStorage({ 
+    destination: (req, file, cb) => { 
+        cb(null, 'uploads') 
+    }, 
+    filename: (req, file, cb) => { 
+        cb(null, file.fieldname + '-' + Date.now()) 
+    } 
+}); 
 
 exports.register = function(req, res){
     if(!req.session.username){
@@ -259,7 +270,7 @@ exports.update = function(req, res){
         res.redirect('/officeadmin/login?error=notsignedin');
     }
     else {
-    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation ){
+    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation && req.body.idfile && req.body.employeedesignation && req.body.addressfile && req.body.employeedesignation && req.body.photo){
         employeeregistrationmodel.updateOne({employeeid : req.body.employeeid} , {
         fullname : req.body.fullname,
         dob : req.body.dob,

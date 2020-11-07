@@ -85,6 +85,18 @@ var employeeregistrationSchema = new Schema({
     salary:{
         type: Number,
         required: true
+    },
+    idfile:{ 
+        data: Buffer, 
+        contentType: String 
+    },
+    addressfile:{ 
+        data: Buffer, 
+        contentType: String 
+    }, 
+    photo:{ 
+        data: Buffer, 
+        contentType: String 
     }
 });
 
