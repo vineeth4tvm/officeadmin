@@ -17,7 +17,7 @@ exports.home = function(req, res){
         }
         else{
             var date1 = new Date;
-            var year1 = date1.getUTCFullYear();
+            var year1 = date1.getFullYear();
             year1 = year1.toString();
             var month1 = date1.getUTCMonth() + 1;
             month1 = month1.toString();
