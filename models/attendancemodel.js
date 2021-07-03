@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mongoDB2 = 'mongodb+srv://vineeth4tvm:bluebridge@cluster0-skw0g.mongodb.net/officeadmin?retryWrites=true&w=majority';
+var mongoDB2 = 'mongodb://127.0.0.1:27017/officeadmin';
 mongoose.connect(mongoDB2, { useUnifiedTopology: true, useNewUrlParser: true });
 mongoose.set('useCreateIndex', true);
 var db = mongoose.connection;

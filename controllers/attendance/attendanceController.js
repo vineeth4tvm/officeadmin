@@ -212,7 +212,7 @@ exports.postmark = function(req, res){
                         console.log(timetype);
                         if(data[timetype] != 'na'){
                             console.log('data timetype is '+typeof(data[timetype]));
-                            var message = timetype.toUpperCase()+' already marked for '+employeeid+' at '+data[timetype];
+                            var message = timetype.toUpperCase()+' already marked for id: '+employeeid+' at '+data[timetype];
                             res.render('attendance/mark_attendance', {time: req.body.time, message: message});
                         }
                         else if (data[timetype] == 'na'){
