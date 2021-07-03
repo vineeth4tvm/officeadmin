@@ -1,6 +1,5 @@
 var attendancemodel = require('../../models/attendancemodel');
 var employeeregistrationmodel = require('../../models/employeeregistrationmodel');
-const e = require('express');
 const session = require('express-session');
 const attendance = require('../../models/attendancemodel');
 
