@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var bodyparser = require('body-parser');
- 
+const formidable = require("formidable");
 
 
 var indexRouter = require('./routes/index');
@@ -25,7 +25,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyparser.urlencoded({extended: false}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

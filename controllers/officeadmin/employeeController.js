@@ -1,15 +1,8 @@
 var employeeregistrationmodel = require('../../models/employeeregistrationmodel');
 var fs = require('fs');
 var path = require('path');
-var multer = require('multer');
-var storage = multer.diskStorage({ 
-    destination: (req, file, cb) => { 
-        cb(null, 'uploads') 
-    }, 
-    filename: (req, file, cb) => { 
-        cb(null, file.fieldname + '-' + Date.now()) 
-    } 
-}); 
+const formidable = require('formidable');
+var grid = require("gridfs-stream");
 
 exports.register = function(req, res){
     if(!req.session.username){
@@ -65,7 +58,7 @@ exports.saveemployee = function(req, res){
         res.redirect('/officeadmin/login?error=notsignedin');
     }
     else {
-    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation ){
+    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation && req.files.idfile && req.files.addressfile && req.files.photo){
         employeeregistrationmodel1.fullname = req.body.fullname;
         employeeregistrationmodel1.dob = req.body.dob;
         employeeregistrationmodel1.id_proof = req.body.id_proof;
@@ -90,6 +83,9 @@ exports.saveemployee = function(req, res){
         employeeregistrationmodel1.employmentstatus = req.body.employmentstatus;
         employeeregistrationmodel1.joiningdate = req.body.joiningdate;
         employeeregistrationmodel1.salary = req.body.salary;
+        employeeregistrationmodel1.idfile = req.files.idfile;
+        employeeregistrationmodel1.addressfile = req.files.addressfile;
+        employeeregistrationmodel1.photo = req.files.photo;
         employeeregistrationmodel1.save(function (err, data){
             if(err){
                 console.log('Error : '+err);
@@ -270,7 +266,47 @@ exports.update = function(req, res){
         res.redirect('/officeadmin/login?error=notsignedin');
     }
     else {
-    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation && req.body.idfile && req.body.employeedesignation && req.body.addressfile && req.body.employeedesignation && req.body.photo){
+
+        var form = new formidable.IncomingForm();
+        
+        form.parse(req, (err, fields, files) => {
+            
+            if (err) {
+                next(err);
+                return;
+            }
+            
+            var oldpath1 = files.idfile.path;
+            var newpath1 = process.cwd()+'/uploads/id_proofs/'+fields.employeeid+fields.id_proof+files.idfile.name;
+            fs.rename(oldpath1, newpath1, function (err) {
+                if (err) throw err;
+                console.log("id upload success!")
+            });
+
+            var oldpath2 = files.addressfile.path;
+            var newpath2 = process.cwd()+'/uploads/address_proofs/'+fields.employeeid+fields.address_proof+files.addressfile.name;
+            fs.rename(oldpath2, newpath2, function (err) {
+                if (err) throw err;
+                console.log("address upload success!")
+            });
+            console.log(fields);
+            var oldpath3 = files.photo.path;
+            var newpath3 = process.cwd()+'/uploads/photos/'+fields.employeeid+files.photo.name;
+            fs.rename(oldpath3, newpath3, function (err) {
+                if (err) throw err;
+                console.log("photo upload success!")
+            });
+
+
+
+
+        });
+
+    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation  && req.body.employeedesignation && req.body.employeedesignation){
+        
+       
+       
+        
         employeeregistrationmodel.updateOne({employeeid : req.body.employeeid} , {
         fullname : req.body.fullname,
         dob : req.body.dob,
@@ -292,7 +328,8 @@ exports.update = function(req, res){
         employeedesignation : req.body.employeedesignation,
         employmentstatus : req.body.employmentstatus,
         joiningdate : req.body.joiningdate,
-        salary : req.body.salary
+        salary : req.body.salary,
+
         },function (err, data){
             if(err){
                 console.log('Error : '+err);
