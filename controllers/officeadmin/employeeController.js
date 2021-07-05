@@ -58,34 +58,73 @@ exports.saveemployee = function(req, res){
         res.redirect('/officeadmin/login?error=notsignedin');
     }
     else {
-    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation && req.files.idfile && req.files.addressfile && req.files.photo){
-        employeeregistrationmodel1.fullname = req.body.fullname;
-        employeeregistrationmodel1.dob = req.body.dob;
-        employeeregistrationmodel1.id_proof = req.body.id_proof;
-        employeeregistrationmodel1.idproofnumber = req.body.idproofnumber;
-        employeeregistrationmodel1.address_proof = req.body.address_proof;
-        employeeregistrationmodel1.addressproofnumber = req.body.addressproofnumber;
-        employeeregistrationmodel1.address1 = req.body.address1;
-        employeeregistrationmodel1.address2 = req.body.address2;
-        employeeregistrationmodel1.address3 = req.body.address3;
-        employeeregistrationmodel1.pin = req.body.pin;
-        employeeregistrationmodel1.mobile = req.body.mobile;
-        employeeregistrationmodel1.email = req.body.email;
-        employeeregistrationmodel1.guardian_name = req.body.guardian_name;
-        employeeregistrationmodel1.guardian_phone = req.body.guardian_phone;
-        employeeregistrationmodel1.guardian_address = req.body.guardian_address;
-        employeeregistrationmodel1.employeeid = req.body.employeeid;
+
+        var form = new formidable.IncomingForm();
+        form.parse(req, (err, fields, files) => {
+            
+            if (err) {
+                next(err);
+                return;
+            }
+
+        
+
+
+
+    if(fields.fullname && fields.dob && fields.id_proof && fields.idproofnumber && fields.address_proof && fields.addressproofnumber && fields.address1 && fields.address2 && fields.address3 && fields.pin && fields.mobile && fields.email && fields.guardian_name && fields.guardian_phone && fields.guardian_address && fields.employeedesignation && files.idfile && files.addressfile && files.photo){
+        
+        var oldpath1 = files.idfile.path;
+        var newpath1 = process.cwd()+'/public/uploads/id_proofs/'+fields.employeeid+fields.id_proof+files.idfile.name;
+        var idpath = '/uploads/id_proofs/'+fields.employeeid+fields.id_proof+files.idfile.name;
+        fs.rename(oldpath1, newpath1, function (err) {
+        if (err) throw err;
+            console.log("id upload success!")
+        });
+
+        var oldpath2 = files.addressfile.path;
+        var newpath2 = process.cwd()+'/public/uploads/address_proofs/'+fields.employeeid+fields.address_proof+files.addressfile.name;
+        var addresspath = '/uploads/address_proofs/'+fields.employeeid+fields.address_proof+files.addressfile.name;
+        fs.rename(oldpath2, newpath2, function (err) {
+            if (err) throw err;
+            console.log("address upload success!")
+        });
+        
+        var oldpath3 = files.photo.path;
+        var newpath3 = process.cwd()+'/public/uploads/photos/'+fields.employeeid+files.photo.name;
+        var photopath = '/uploads/photos/'+fields.employeeid+files.photo.name;
+        fs.rename(oldpath3, newpath3, function (err) {
+            if (err) throw err;
+            console.log("photo upload success!")
+        });
+        
+        
+        employeeregistrationmodel1.fullname = fields.fullname;
+        employeeregistrationmodel1.dob = fields.dob;
+        employeeregistrationmodel1.id_proof = fields.id_proof;
+        employeeregistrationmodel1.idproofnumber = fields.idproofnumber;
+        employeeregistrationmodel1.address_proof = fields.address_proof;
+        employeeregistrationmodel1.addressproofnumber = fields.addressproofnumber;
+        employeeregistrationmodel1.address1 = fields.address1;
+        employeeregistrationmodel1.address2 = fields.address2;
+        employeeregistrationmodel1.address3 = fields.address3;
+        employeeregistrationmodel1.pin = fields.pin;
+        employeeregistrationmodel1.mobile = fields.mobile;
+        employeeregistrationmodel1.email = fields.email;
+        employeeregistrationmodel1.guardian_name = fields.guardian_name;
+        employeeregistrationmodel1.guardian_phone = fields.guardian_phone;
+        employeeregistrationmodel1.guardian_address = fields.guardian_address;
+        employeeregistrationmodel1.employeeid = fields.employeeid;
         employeeregistrationmodel1.created_by = req.session.username;
         employeeregistrationmodel1.created_on = Date.now();
         employeeregistrationmodel1.updated_by = req.session.username;
         employeeregistrationmodel1.updated_on = Date.now();
-        employeeregistrationmodel1.employeedesignation = req.body.employeedesignation;
-        employeeregistrationmodel1.employmentstatus = req.body.employmentstatus;
-        employeeregistrationmodel1.joiningdate = req.body.joiningdate;
-        employeeregistrationmodel1.salary = req.body.salary;
-        employeeregistrationmodel1.idfile = req.files.idfile;
-        employeeregistrationmodel1.addressfile = req.files.addressfile;
-        employeeregistrationmodel1.photo = req.files.photo;
+        employeeregistrationmodel1.employeedesignation = fields.employeedesignation;
+        employeeregistrationmodel1.employmentstatus = fields.employmentstatus;
+        employeeregistrationmodel1.joiningdate = fields.joiningdate;
+        employeeregistrationmodel1.salary = fields.salary;
+        employeeregistrationmodel1.idfile = idpath;
+        employeeregistrationmodel1.addressfile = addresspath;
+        employeeregistrationmodel1.photo = photopath;
         employeeregistrationmodel1.save(function (err, data){
             if(err){
                 console.log('Error : '+err);
@@ -106,7 +145,8 @@ exports.saveemployee = function(req, res){
     else{
             res.redirect('/officeadmin/register?emptyfields=true');
         } 
-    }
+    });
+ }
 }
 
 exports.delete = function(req, res){
@@ -276,93 +316,93 @@ exports.update = function(req, res){
                 return;
             }
             
-            var oldpath1 = files.idfile.path;
-            var newpath1 = process.cwd()+'/uploads/id_proofs/'+fields.employeeid+fields.id_proof+files.idfile.name;
-            fs.rename(oldpath1, newpath1, function (err) {
-                if (err) throw err;
-                console.log("id upload success!")
-            });
-
-            var oldpath2 = files.addressfile.path;
-            var newpath2 = process.cwd()+'/uploads/address_proofs/'+fields.employeeid+fields.address_proof+files.addressfile.name;
-            fs.rename(oldpath2, newpath2, function (err) {
-                if (err) throw err;
-                console.log("address upload success!")
-            });
-            console.log(fields);
-            var oldpath3 = files.photo.path;
-            var newpath3 = process.cwd()+'/uploads/photos/'+fields.employeeid+files.photo.name;
-            fs.rename(oldpath3, newpath3, function (err) {
-                if (err) throw err;
-                console.log("photo upload success!")
-            });
-
-
-
-
-        });
-
-    if(req.body.fullname && req.body.dob && req.body.id_proof && req.body.idproofnumber && req.body.address_proof && req.body.addressproofnumber && req.body.address1 && req.body.address2 && req.body.address3 && req.body.pin && req.body.mobile && req.body.email && req.body.guardian_name && req.body.guardian_phone && req.body.guardian_address && req.body.employeedesignation  && req.body.employeedesignation && req.body.employeedesignation){
-        
-       
-       
-        
-        employeeregistrationmodel.updateOne({employeeid : req.body.employeeid} , {
-        fullname : req.body.fullname,
-        dob : req.body.dob,
-        id_proof : req.body.id_proof,
-        idproofnumber : req.body.idproofnumber,
-        address_proof : req.body.address_proof,
-        addressproofnumber : req.body.addressproofnumber,
-        address1 : req.body.address1,
-        address2 : req.body.address2,
-        address3 : req.body.address3,
-        pin : req.body.pin,
-        mobile : req.body.mobile,
-        email : req.body.email,
-        guardian_name : req.body.guardian_name,
-        guardian_phone : req.body.guardian_phone,
-        guardian_address : req.body.guardian_address,
-        updated_by : req.session.username,
-        updated_on : Date.now(),
-        employeedesignation : req.body.employeedesignation,
-        employmentstatus : req.body.employmentstatus,
-        joiningdate : req.body.joiningdate,
-        salary : req.body.salary,
-
-        },function (err, data){
-            if(err){
-                console.log('Error : '+err);
-                res.redirect('/officeadmin/editemployee?employeeid='+req.body.employeeid+'&emptyfields=true&&error='+err);
-            }
-
-            else{
             
-                employeeregistrationmodel.findOne({employeeid : req.body.employeeid}, {}, function (err, data){
-                    if (err) {
-                        console.log('Could not connect to the database because :'+err);
-                        var error = [];
-                        error.status = 'Could not connect to the database because :'+err;
-                        error.stack = 'error in fetching employee details.</br>Please check your internet connection';
-                        res.render('error', {error: error});
+            if(fields.fullname && fields.dob && fields.id_proof && fields.idproofnumber && fields.address_proof && fields.addressproofnumber && fields.address1 && fields.address2 && fields.address3 && fields.pin && fields.mobile && fields.email && fields.guardian_name && fields.guardian_phone && fields.guardian_address && fields.employeedesignation  && fields.employeedesignation && fields.employeedesignation){   
+                
+                    var oldpath1 = files.idfile.path;
+                    var newpath1 = process.cwd()+'/public/uploads/id_proofs/'+fields.employeeid+fields.id_proof+files.idfile.name;
+                    var idpath = '/uploads/id_proofs/'+fields.employeeid+fields.id_proof+files.idfile.name;
+                    fs.rename(oldpath1, newpath1, function (err) {
+                    if (err) throw err;
+                        console.log("id upload success!")
+                    });
+
+                    var oldpath2 = files.addressfile.path;
+                    var newpath2 = process.cwd()+'/public/uploads/address_proofs/'+fields.employeeid+fields.address_proof+files.addressfile.name;
+                    var addresspath = '/uploads/address_proofs/'+fields.employeeid+fields.address_proof+files.addressfile.name;
+                    fs.rename(oldpath2, newpath2, function (err) {
+                        if (err) throw err;
+                        console.log("address upload success!")
+                    });
+                    
+                    var oldpath3 = files.photo.path;
+                    var newpath3 = process.cwd()+'/public/uploads/photos/'+fields.employeeid+files.photo.name;
+                    var photopath = '/uploads/photos/'+fields.employeeid+files.photo.name;
+                    fs.rename(oldpath3, newpath3, function (err) {
+                        if (err) throw err;
+                        console.log("photo upload success!")
+                    });
+
+
+                
+                employeeregistrationmodel.updateOne({employeeid : fields.employeeid} , {
+                fullname : fields.fullname,
+                dob : fields.dob,
+                id_proof : fields.id_proof,
+                idproofnumber : fields.idproofnumber,
+                address_proof : fields.address_proof,
+                addressproofnumber : fields.addressproofnumber,
+                address1 : fields.address1,
+                address2 : fields.address2,
+                address3 : fields.address3,
+                pin : fields.pin,
+                mobile : fields.mobile,
+                email : fields.email,
+                guardian_name : fields.guardian_name,
+                guardian_phone : fields.guardian_phone,
+                guardian_address : fields.guardian_address,
+                updated_by : req.session.username,
+                updated_on : Date.now(),
+                employeedesignation : fields.employeedesignation,
+                employmentstatus : fields.employmentstatus,
+                joiningdate : fields.joiningdate,
+                salary : fields.salary,
+                idfile : idpath,
+                addressfile : addresspath,
+                photo : photopath
+                },function (err, data){
+                    if(err){
+                        console.log('Error : '+err);
+                        res.redirect('/officeadmin/editemployee?employeeid='+fields.employeeid+'&emptyfields=true&&error='+err);
                     }
-                    else if(data == null){
-                        
-                        console.log('Could not find the requested employee because :'+err);
-                        
-                        var error = [];
-                        error.status = 'Could not find the requested employee because :'+err;
-                        error.stack = 'Error in fetching employee details.</br>Please check your internet connection';
-                        res.render('error', {error: error});
-                        }
+
                     else{
-                        console.log(data);
-                                //console.log('The employee you requested '+employeeid+' has been successfully deleted')
-                                //message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
-                            res.render('employee_success', {employee : data, message: 'Changes saved successfully'});
-                           
-                        }; 
-                });
+                    
+                        employeeregistrationmodel.findOne({employeeid : fields.employeeid}, {}, function (err, data){
+                            if (err) {
+                                console.log('Could not connect to the database because :'+err);
+                                var error = [];
+                                error.status = 'Could not connect to the database because :'+err;
+                                error.stack = 'error in fetching employee details.</br>Please check your internet connection';
+                                res.render('error', {error: error});
+                            }
+                            else if(data == null){
+                                
+                                console.log('Could not find the requested employee because :'+err);
+                                
+                                var error = [];
+                                error.status = 'Could not find the requested employee because :'+err;
+                                error.stack = 'Error in fetching employee details.</br>Please check your internet connection';
+                                res.render('error', {error: error});
+                                }
+                            else{
+                                console.log(data);
+                                        //console.log('The employee you requested '+employeeid+' has been successfully deleted')
+                                        //message = 'The user id <b>'+employeeid+'</b> has been deleted successfully';
+                                    res.render('employee_success', {employee : data, message: 'Changes saved successfully'});
+                                
+                                }; 
+                        });
 
 
 
@@ -371,11 +411,12 @@ exports.update = function(req, res){
         });
     }
 
-    else{
-            res.redirect('/officeadmin/editemployee?employeeid='+req.body.employeeid+'&emptyfields=true');
-        } 
+        else{
+                res.redirect('/officeadmin/editemployee?employeeid='+fields.employeeid+'&emptyfields=true');
+            } 
+       
+        });
     }
-
 }
 
 

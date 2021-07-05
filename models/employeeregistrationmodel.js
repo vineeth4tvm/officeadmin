@@ -87,16 +87,13 @@ var employeeregistrationSchema = new Schema({
         required: true
     },
     idfile:{ 
-        data: Buffer, 
-        contentType: String 
+        type: String, 
     },
     addressfile:{ 
-        data: Buffer, 
-        contentType: String 
+        type: String,      
     }, 
     photo:{ 
-        data: Buffer, 
-        contentType: String 
+        type: String,  
     }
 });
 

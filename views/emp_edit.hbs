@@ -65,22 +65,23 @@
             <label> Guardian Phone </label><input name="guardian_phone" type="text" placeholder="Guardian Phone" value="{{data.guardian_phone}}" /><br/>
             <p><label>Guardian full address </label></br><textarea name="guardian_address" placeholder="Guardian Full Address" >{{data.guardian_address}}</textarea><br/></p>
             <label>Upload Documents: </label><br/>
-            <label>Id Proof</label><input type="file" name="idfile" /><br/>
-            <label>Address Proof</label><input type="file" name="addressfile" /><br/>
-            <label>Passport Size Photo</label><input type="file" name="photo" /><br/>
+            <label>Id Proof </label><input type="file" name="idfile" /><br/> <img src="{{data.idfile}}" width="60" height="45" alt="No ID Proof" /><br/>
+            <label>Address Proof </label><input type="file" name="addressfile" /><br/><img src="{{data.addressfile}}" width="60" height="45" alt="No Address Proof" /><br/>
+            <label>Passport Size Photo </label><input type="file" name="photo" /><br/><img src="{{data.photo}}" width="60" height="45" alt="No picture" /><br/>
             <label for="employeeid">Employee ID </label><input type="number" name="employeeid" value="{{data.employeeid}}"></br>
-            <label for="employeedesignation">Designation</label><select name="employeedesignation" id="employeedesignation">
+            <label for="employeedesignation">Designation </label><select name="employeedesignation" id="employeedesignation">
                 <option value="">Select</option>
                 <option value="telecaller">Telecaller</option>
             </select></br>
-            <label>Employment Status</label><select name="employmentstatus" id="employmentstatus">
+            <label>Employment Status </label><select name="employmentstatus" id="employmentstatus">
                 <option value="">select</option>
                 <option value="employed">employed</option>
                 <option value="suspended">suspended</option>
                 <option value="resigned">resigned</option>
             </select>
-            <label> Joining Date in YYYYMMDD</label><input type="number" name="joiningdate" value="{{data.joiningdate}}"></br>
+            <label> Joining Date in YYYYMMDD </label><input type="number" name="joiningdate" value="{{data.joiningdate}}"></br>
             <label>Salary </label><input type="number" name="salary" value="{{data.salary}}"/><br/>
+            
             <input type="submit" value="Save" />
         </table>
         </form>
