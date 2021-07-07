@@ -12,6 +12,14 @@ exports.home = function(req, res){
     else {
         if(req.query.date){
             var viewdate = parseInt(req.query.date);
+            var viewdate1 = viewdate.toString();
+            var count = viewdate1.length;
+            if(count == 8){
+
+            }
+            else if(count == 7){
+
+            } 
             var message = 'Status of Attendance for date '+viewdate;
         }
         else{
@@ -23,7 +31,7 @@ exports.home = function(req, res){
             var day1 = date1.getUTCDate();
             day1 = day1.toString();
             var viewdate = year1+month1+day1;
-            var message = 'Todays attendance status';
+            var message = 'Todays attendance status ('+day1+'-'+month1+'-'+year1+')';
         } 
             if(isNaN(viewdate)){
                 res.render('error', {message: 'invalid value given as date'});
@@ -308,5 +316,40 @@ exports.postmark = function(req, res){
             res.render('attendance/choose_attendance');
         }
     }
+    }
+}
+
+exports.month_view = function(req,res){
+    
+    if(!req.session.username){
+        req.session.destroy();
+        res.redirect('/officeadmin/login?error=notsignedin');
+     }
+
+     else{
+
+        if(req.body.emp ) {
+
+            var empid = req.body.emp;
+
+            if(!req.body.month){
+
+                var date1 = new Date;
+                var year1 = date1.getUTCFullYear();
+                year1 = year1.toString();
+                var month1 = date1.getUTCMonth() + 1;
+                month1 = month1.toString();
+                var day1 = date1.getUTCDate();
+                day1 = day1.toString();
+                var datestring = year1+month1+day1;
+                
+            }
+
+
+        
+        }
+
+
+
     }
 }
