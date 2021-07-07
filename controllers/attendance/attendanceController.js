@@ -183,18 +183,18 @@ exports.postmark = function(req, res){
                     }
                 else{
                     if (req.body.dob == data.dob) {
-                        var date1 = new Date;
-                        var year1 = date1.getUTCFullYear();
+                        var date1 = new Date("GMT+05:30");
+                        var year1 = date1.getFullYear();
                         year1 = year1.toString();
-                        var month1 = date1.getUTCMonth() + 1;
+                        var month1 = date1.getMonth() + 1;
                         month1 = month1.toString();
-                        var day1 = date1.getUTCDate();
+                        var day1 = date1.getDate();
                         day1 = day1.toString();
                         var datestring = year1+month1+day1;
 
-                    var hours1 = date1.getUTCHours().toString();
-                    var minutes1 = date1.getUTCMinutes().toString();
-                    var seconds1 =  date1.getUTCSeconds().toString();
+                    var hours1 = date1.getHours().toString();
+                    var minutes1 = date1.getMinutes().toString();
+                    var seconds1 =  date1.getSeconds().toString();
                     var timestring= hours1+' '+minutes1+' '+seconds1;
                         //checking if attendance entry exists for given date.
                     attendancemodel.count({employeeid : employeeid, date : datestring}, function(err, count){
