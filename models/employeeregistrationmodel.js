@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-var mongoDB1 = 'mongodb://127.0.0.1:27017/officeadmin';
-mongoose.connect(mongoDB1, { useUnifiedTopology: true, useNewUrlParser: true });
+var mongoDB1 = "mongodb+srv://cluster0.skw0g.mongodb.net/officeadmin?retryWrites=true&w=majority";
+//'mongodb://127.0.0.1:27017/officeadmin';
+mongoose.connect(mongoDB1, { useUnifiedTopology: true, useNewUrlParser: true, user: 'vineeth4tvm', pass: 'Bluebridge@2021' });
 mongoose.set('useCreateIndex', true);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
