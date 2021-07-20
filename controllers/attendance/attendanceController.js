@@ -10,17 +10,15 @@ exports.home = function(req, res){
         res.redirect('/officeadmin/login?error=notsignedin');
     }
     else {
-        if(req.query.date){
-            var viewdate = parseInt(req.query.date);
-            var viewdate1 = viewdate.toString();
-            var count = viewdate1.length;
-            if(count == 8){
+        if(req.query.year && req.query.month && req.query.day){
+            var year = parseInt(req.query.year);
+            var year1 = year.toString();
+            var month = parseInt(req.query.month);
+            var month1 = month.toString();
+            var day = parseInt(req.query.day);
+            var day1 = day.toString();
 
-            }
-            else if(count == 7){
-
-            } 
-            var message = 'Status of Attendance for date '+viewdate;
+            var message = 'Status of Attendance for date '+day1+'-'+month1+'-'+year1;
         }
         else{
             var date1 = new Date(Date.now()+19800000);
@@ -30,10 +28,10 @@ exports.home = function(req, res){
             month1 = month1.toString();
             var day1 = date1.getUTCDate();
             day1 = day1.toString();
-            var viewdate = year1+month1+day1;
+            
             var message = 'Todays attendance status ('+day1+'-'+month1+'-'+year1+')';
         } 
-            if(isNaN(viewdate)){
+            if(isNaN(year1) || isNaN(month1) || isNaN(day1)){
                 res.render('error', {message: 'invalid value given as date'});
             }
             else{
@@ -47,7 +45,7 @@ exports.home = function(req, res){
 
                     else{
                     var employeelist = {};
-                    attendancemodel.find({date: viewdate}, function(err, attdata){
+                    attendancemodel.find({year: year1, month: month1, day: day1}, function(err, attdata){
                         
                         var key = 0 ;
                         var attresult = {};   
@@ -80,7 +78,9 @@ exports.home = function(req, res){
                             employeeid : `${data[property]['employeeid']}`,
                             intime: 'na',
                             outtime: 'na',
-                            date: viewdate
+                            year : year1,
+                            month : month1,
+                            day: day1
                             };
                             key++; 
 
@@ -199,7 +199,7 @@ exports.postmark = function(req, res){
                     var seconds1 =  date1.getUTCSeconds().toString();
                     var timestring= hours1+' '+minutes1+' '+seconds1;
                         //checking if attendance entry exists for given date.
-                    attendancemodel.count({employeeid : employeeid, date : datestring}, function(err, count){
+                    attendancemodel.count({employeeid : employeeid, year : year1, month : month1, day: day1}, function(err, count){
                     
                     
                     var timetype = req.body.time;
@@ -214,7 +214,7 @@ exports.postmark = function(req, res){
                         }
                         else {
                         // get data from attendance entry to find if already marked or yet to be marked  
-                attendancemodel.findOne({employeeid : employeeid, date: datestring}, function(err, data){
+                attendancemodel.findOne({employeeid : employeeid, year : year1, month : month1, day: day1}, function(err, data){
                         if(err){
                             res.render('error', {message: 'error in connection :'+err});
                         }    
@@ -228,7 +228,7 @@ exports.postmark = function(req, res){
                             console.log('data timetype is '+typeof(data[timetype]));
                             
                             //update the attendance entry  timwetype with time.
-                            attendancemodel.updateOne({employeeid : employeeid, date: datestring},{
+                            attendancemodel.updateOne({employeeid : employeeid, year : year1, month : month1, day: day1},{
                                 
                             [timetype]: timestring,
                             modifiedtime : timestring,
@@ -276,12 +276,14 @@ exports.postmark = function(req, res){
                         attendancemodel1 = new attendancemodel;
     
                         attendancemodel1.employeeid = employeeid;
-                        attendancemodel1.date = datestring;
+                        attendancemodel1.year = year1;
+                        attendancemodel1.month = month1;
+                        attendancemodel1.day = day1;
                         attendancemodel1.intime = intime;
                         attendancemodel1.outtime = outtime;
-                        attendancemodel1.markedtime = Date.now();
+                        attendancemodel1.markedtime = Date.now()+19800000;
                         attendancemodel1.markedby = req.session.username;
-                        attendancemodel1.modifiedtime = Date.now();
+                        attendancemodel1.modifiedtime = Date.now()+19800000;
                         attendancemodel1.modifiedby = req.session.username;
     
                         attendancemodel1.save( function(err, data){
@@ -291,8 +293,8 @@ exports.postmark = function(req, res){
                                 res.render('error', {message: message});
                             }
                             else{
-                                console.log('Attendance has been marked for the user id '+employeeid)
-                                message = 'Attendance has been marked for the user id '+employeeid;
+                                console.log('Attendance has been marked for employee: '+employeeid)
+                                message = 'Attendance has been marked for employee: '+employeeid;
                                 res.render('attendance/attendancesuccess', {message: message, data: data});
                             }
                              }); 
@@ -330,28 +332,42 @@ exports.month_view = function(req,res){
 
      else{
 
-        if(req.body.emp ) {
+        if(req.query.emp ) {
 
-            var empid = req.body.emp;
+            var empid = req.query.emp;
 
-            if(!req.body.month){
-
-                var date1 = new Date;
+            if(!req.query.month || !req.query.year){
+                var now1 = Date.now();
+                var milliseconds1 = 19800000;
+                var date1 = new Date(now1+milliseconds1);
                 var year1 = date1.getUTCFullYear();
                 year1 = year1.toString();
                 var month1 = date1.getUTCMonth() + 1;
                 month1 = month1.toString();
                 var day1 = date1.getUTCDate();
                 day1 = day1.toString();
-                var datestring = year1+month1+day1;
+                var datestring = month1+'-'+year1;
                 
             }
+            
+            else{
+
+                var month1 = req.query.month;
+                var year1  = req.query.year;
+
+            }
+
+        }
+
+        else{
+
+            res.render('error', {message : 'Please select an employee to view monthly attendance summary!'})
+
+        }
 
 
         
         }
 
 
-
-    }
-}
+ }

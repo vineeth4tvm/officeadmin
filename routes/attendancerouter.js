@@ -6,7 +6,7 @@ var attendanceController = require('../controllers/attendance/attendanceControll
 router.get('/', attendanceController.home);
 router.get('/mark', attendanceController.mark);
 router.post('/mark', attendanceController.postmark);
-router.get('month_view', attendanceController.month_view);
+router.get('/month_view', attendanceController.month_view);
 
 
 module.exports = router;

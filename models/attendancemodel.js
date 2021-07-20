@@ -12,7 +12,13 @@ var attendanceSchema = new Schema({
     employeeid:{
         type: Number, 
     },
-    date : {
+    year : {
+        type: String, 
+    },
+    month : {
+        type: String, 
+    },
+    day : {
         type: String, 
     },
     intime:{
