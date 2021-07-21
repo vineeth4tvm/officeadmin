@@ -334,9 +334,13 @@ exports.month_view = function(req,res){
 
         if(req.query.emp ) {
 
-            var empid = req.query.emp;
+            var empid = req.query.emp.toString();
+            var months = ['January','January','February','March',
+                            'April','May','June','July',
+                            'August','September','October',
+                            'November','December'];
 
-            if(!req.query.month || !req.query.year){
+            if(!req.query.month || !req.query.year || req.query.month <1 || req.query.month > 12){
                 var now1 = Date.now();
                 var milliseconds1 = 19800000;
                 var date1 = new Date(now1+milliseconds1);
@@ -347,15 +351,22 @@ exports.month_view = function(req,res){
                 var day1 = date1.getUTCDate();
                 day1 = day1.toString();
                 var datestring = month1+'-'+year1;
+                var month_name = months[month1];
                 
-            }
+            }   
+
+            
             
             else{
 
                 var month1 = req.query.month;
                 var year1  = req.query.year;
+                var month_name = months[req.query.month];
+
 
             }
+
+            res.render('error', { message : 'Monthly Attendance Report of '+empid+' for '+month_name+'-'+year1 })
 
         }
 
