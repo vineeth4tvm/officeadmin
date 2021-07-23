@@ -35,6 +35,7 @@ exports.home = function(req, res){
                 res.render('error', {message: 'invalid value given as date'});
             }
             else{
+                //find how many employess are there in the collection
                 employeeregistrationmodel.find({employmentstatus : 'employed'},'fullname employeedesignation employeeid', function(err, data){
                     if(err){
                         res.render('error', {message : 'couldnt connect to databasae because '+err});
@@ -45,18 +46,22 @@ exports.home = function(req, res){
 
                     else{
                     var employeelist = {};
+
+                    //get attendance data
                     attendancemodel.find({year: year1, month: month1, day: day1}, function(err, attdata){
                         
                         var key = 0 ;
                         var attresult = {};   
                                             
-                        
+                        //link and merge data from both collections
                         for (const property in data) {
                             
                             var subattdata = attdata.filter(item => item.employeeid == `${data[property]['employeeid']}`);
                             
                             
-                            console.log(typeof(subattdata[0]));
+                            //console.log(typeof(subattdata[0]));
+
+                            //if there are entries in attendance collection, append to employee collection data rows
                             if(subattdata.length){
                             console.log('employee list empname: '+`${data[property]['fullname']}` +' , attdata empl id :  '+ subattdata[0]['employeeid']);
                             if(`${data[property]['employeeid']}` == subattdata[0]['employeeid']){
@@ -73,6 +78,7 @@ exports.home = function(req, res){
                         
                         }
                         else{
+                            //if no entry is found in attendance collection, populate columns with values 'na'
                             attresult[key]={};
                             attresult[key]= {fullname: `${data[property]['fullname']}`,
                             employeeid : `${data[property]['employeeid']}`,
