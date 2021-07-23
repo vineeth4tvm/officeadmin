@@ -259,7 +259,7 @@ exports.postmark = function(req, res){
                 }
 
               //create a new attendance entry if time is not marked in timetype column ie, intime or outtime  and timeype column value is not '',
-              //then create a collection entry with all details with value '' for the other time type
+              //then create a collection entry with all details with value 'na' for the other time type
 
                 else {
 
