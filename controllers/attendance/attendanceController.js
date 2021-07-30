@@ -205,7 +205,7 @@ exports.postmark = function(req, res){
                     var seconds1 =  date1.getUTCSeconds().toString();
                     var timestring= hours1+' '+minutes1+' '+seconds1;
                         //checking if attendance entry exists for given date.
-                    attendancemodel.count({employeeid : employeeid, year : year1, month : month1, day: day1}, function(err, count){
+                    attendancemodel.countDocuments({employeeid : employeeid, year : year1, month : month1, day: day1}, function(err, count){
                     
                     
                     var timetype = req.body.time;
@@ -369,10 +369,96 @@ exports.month_view = function(req,res){
 
             }
             var datestring = month_name+'-'+year1;
+
+
+            employeeregistrationmodel.find({employmentstatus : 'employed'},'fullname employeedesignation employeeid', function(err, data){
+                    if(err){
+                        res.render('error', {message : 'couldnt connect to databasae because '+err});
+                    }
+                    if(!data){
+                        res.render('attendance/month_view',{message: 'No employees found in the database'});
+                    }
+
+                    else{
+                    var employeelist = {};
+
+                    //get attendance data
+                    attendancemodel.find({year: year1, month: month1}, function(err, attdata){
+                        
+                        var key = 0 ;
+                        var attresult = {};   
+                                            
+                        //link and merge data from both collections
+                        for (const property in data) {
+                            
+                            var subattdata = attdata.filter(item => item.employeeid == `${data[property]['employeeid']}`);
+                            
+                            
+                            //console.log(typeof(subattdata[0]));
+
+                            //if there are entries in attendance collection, append to employee collection data rows
+                            if(subattdata.length){
+                            console.log('employee list empname: '+`${data[property]['fullname']}` +' , attdata empl id :  '+ subattdata[0]['employeeid']);
+                            if(`${data[property]['employeeid']}` == subattdata[0]['employeeid']){
+                               
+                                attresult[key] = {};
+
+                                attresult[key] = subattdata[0];
+
+                                attresult[key]['fullname'] = `${data[property]['fullname']}`;
+                                
+                                
+                            }
+                            key++;
+                        
+                        }
+                        else{
+                            //if no entry is found in attendance collection, populate columns with values 'na'
+                            attresult[key]={};
+                            attresult[key]= {fullname: `${data[property]['fullname']}`,
+                            employeeid : `${data[property]['employeeid']}`,
+                            intime: 'na',
+                            outtime: 'na',
+                            year : year1,
+                            month : month1,
+                            day: day1
+                            };
+                            key++; 
+
+                        }
+                    }
+
+
+                        res.render('attendance/month_view', { attresult: attresult, message : 'Monthly Attendance Report for '+datestring, month: datestring});
+
+                       // res.render('attendance/attendancehome', {attresult: attresult, message : message});
+                        //{message: empresult}}
+                       console.log(attresult);
+                   
+
+                    //var date2 = new Date();
+                    //console.log('Date in employee list is : '+ attdata);
+                    //var empresult = employeelist['1'].fullname;
+                    
+                    //console.log(attresult[1]['fullname']);
+                        
+                    
+                    }
+                    ).lean()}
+                    
+            }
+
+                )
+
+
+
+
+
+
+
         
             
-            res.render('attendance/month_view', { message : 'Monthly Attendance Report for '+datestring, month: datestring});
-
+  
         
         
         }
