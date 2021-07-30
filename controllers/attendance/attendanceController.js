@@ -371,7 +371,7 @@ exports.month_view = function(req,res){
             var datestring = month_name+'-'+year1;
         
             
-            res.render('error', { message : 'Monthly Attendance Report for '+datestring})
+            res.render('attendance/month_view', { message : 'Monthly Attendance Report for '+datestring, month: datestring});
 
         
         
