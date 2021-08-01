@@ -21,6 +21,6 @@
     "morgan": "~1.9.1",
     "mquery": "^3.2.5",
     "multer-gridfs-storage": "^5.0.0",
-    "nodemon": "^2.0.10"
+    "nodemon": "^2.0.12"
   }
 }
