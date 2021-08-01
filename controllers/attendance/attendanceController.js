@@ -344,6 +344,17 @@ exports.month_view = function(req,res){
                             'August','September','October',
                             'November','December'];
 
+            var getDaysInMonth = function(month,year) {
+                // Here January is 1 based
+                //Day 0 is the last day in the previous month
+                return new Date(year, month, 0).getDate();
+                // Here January is 0 based
+                // return new Date(year, month+1, 0).getDate();
+            };
+
+
+
+
             if(!req.query.month || !req.query.year || parseInt(req.query.month) <1 || parseInt(req.query.month) > 12 || parseInt(req.query.year) > 2025 || parseInt(req.query.year) < 2021){
                 var now1 = Date.now();
                 var milliseconds1 = 19800000;
@@ -369,7 +380,8 @@ exports.month_view = function(req,res){
 
             }
             var datestring = month_name+'-'+year1;
-
+            var totaldays = getDaysInMonth(month1,year1);
+            console.log(totaldays);
 
             employeeregistrationmodel.find({employmentstatus : 'employed'},'fullname employeedesignation employeeid', function(err, data){
                     if(err){
