@@ -92,7 +92,7 @@ exports.month_view = function(req,res){
                             if(`${data[property]['employeeid']}` == subattdata[0]['employeeid']){
                                
                                 attresult[key] = subattdata[0];
-                                //console.log(subattdata[0]);
+                                console.log(subattdata);
                                 var key1 = 1;
                                 attresult[key] = {};
                                 attresult[key]['intime'] = {};
@@ -116,7 +116,7 @@ exports.month_view = function(req,res){
                                 
 
                                 attresult[key]['fullname'] = `${data[property]['fullname']}`;
-                                
+                                attresult[key]['employeeid'] = `${data[property]['employeeid']}`;
                                 
                             }
                             key++;
