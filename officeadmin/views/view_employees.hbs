@@ -1,0 +1,16 @@
+<head>
+    <title>Employees</title>
+</head>
+<h3>Employees List</h3>
+<table>
+    {{#if employee}}
+    <tr><tr><th>Employee id</th><th>Name</th><th>Designation</th><th>Joined on</th><th>Status</th><th>View More</th><th>Edit</th><th>Remove</th></tr>
+    {{#each employee}}
+     <tr><td>{{this.employeeid}}</td><td>{{this.fullname}}</td><td>{{this.employeedesignation}}</td><td>{{this.joiningdate}}</td><td>{{this.employmentstatus}}</td><td><a href="employeeprofile?employeeid={{this.employeeid}}">View More</a></td><td><a href="editemployee?employeeid={{this.employeeid}}">Edit</a></td><td><a href="deleteemployee?employeeid={{this.employeeid}}">Delete</a></td></tr>
+    {{/each}}
+    {{/if}}
+</table>
+{{#if message}}
+<h2>{{message}}</h2>
+{{/if}}
+
